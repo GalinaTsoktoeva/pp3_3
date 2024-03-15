@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Hello, user!</title>
+</head>
+<body>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+<!--<sec:authorize url="/admin">-->
+<!--    <a href="/admin">Админка</a>-->
+    <a href="/admin/users">USERS list</a>
+<!--</sec:authorize>-->
+</div>
+<sec:authorize url="/user">
+    <a href="/user-info">Информация о пользователе</a>
+</sec:authorize>
+</body>
+</html>

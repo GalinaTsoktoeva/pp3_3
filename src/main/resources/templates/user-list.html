@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Users</h1>
-<a th:href="@{/user-create}" class="btn btn-primary btn-sm mb-3"> Add User </a>
+<a th:href="@{/admin/user-create}" class="btn btn-primary btn-sm mb-3"> Add User </a>
 
 <table border="1">
     <tr>
@@ -21,10 +21,13 @@
         <td th:utext="${user.firstname}">Firstname</td>
         <td th:utext="${user.lastname}">Lastname</td>
         <td th:utext="${user.email}">Email</td>
-        <td><a th:href="@{/user-update/{id}(id=${user.id})}" class="btn btn-primary">Update</a></td>
-        <td><a th:href="@{/user-delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a></td>
+        <td><a th:href="@{/admin/user-update/{id}(id=${user.id})}" class="btn btn-primary">Update</a></td>
+        <td><a th:href="@{/admin/user-delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a></td>
     </tr>
 
 </table>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
 </body>
 </html>

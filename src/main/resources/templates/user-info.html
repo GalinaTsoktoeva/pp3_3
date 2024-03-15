@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Users update</title>
+    <title>Users info</title>
 </head>
 <body>
 <div class="container">
     <hr>
-    <h2>Save</h2>
+    <form action="#" th:action="@{/user-info}" th:object="${user}" method="POST">
+        <h1>Hello! </h1>
+        <input type="text" th:field="*{username}"
+               placeholder="User Name" class="form-control mb-4 col-4">
 
-    <form action="#" th:action="@{/admin/user-update}" th:object="${user}"
-          method="POST">
         <input type="text" th:field="*{firstname}"
                placeholder="User Name" class="form-control mb-4 col-4">
 
@@ -21,15 +22,15 @@
                placeholder="Course Email" class="form-control mb-4 col-4">
         <input type="text" th:field="*{username}"
                placeholder="username" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{password}"
-               placeholder="password" class="form-control mb-4 col-4">
 
-        <button type="submit" class="btn btn-info col-2"> Save User</button>
+<!--        <button type="submit" class="btn btn-info col-2"> Save User</button>-->
     </form>
 
     <hr>
 
-    <a th:href="@{/admin/users}"> Back to User List</a>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
 </div>
 </body>
 </html>

@@ -13,7 +13,7 @@
     <hr>
     <h2>Save</h2>
 
-    <form action="#" th:action="@{/user-create}" th:object="${user}"
+    <form action="#" th:action="@{/admin/user-create}" th:object="${user}"
           method="POST">
         <input type="text" th:field="*{firstname}"
                placeholder="User Name" class="form-control mb-4 col-4">
@@ -24,12 +24,18 @@
         <input type="text" th:field="*{email}"
                placeholder="Course Email" class="form-control mb-4 col-4">
 
+        <input type="text" th:field="*{username}"
+               placeholder="username" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{password}"
+               placeholder="password" class="form-control mb-4 col-4">
+
+
         <button type="submit" class="btn btn-info col-2"> Save User</button>
     </form>
 
     <hr>
 
-    <a th:href="@{/user-list}"> Back to User List</a>
+    <a th:href="@{/admin/users}"> Back to User List</a>
 </div>
 </body>
 </html>
