@@ -35,13 +35,24 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/users")
     public String findAll(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByUsername(auth.getName());
+        if(user==null) System.out.println("User is null");
+
+        model.addAttribute("userAuth",user);
+
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
         return "user-list";
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/user-create")
-    public String createUserForm(User user) {
+    public String createUserForm(User user, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User userAuth = userService.findByUsername(auth.getName());
+        if(userAuth==null) System.out.println("User is null");
+
+        model.addAttribute("userAuth",userAuth);
         return "user-create";
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -59,6 +70,10 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User userAuth = userService.findByUsername(auth.getName());
+        model.addAttribute("userAuth", userAuth);
+
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user-update";

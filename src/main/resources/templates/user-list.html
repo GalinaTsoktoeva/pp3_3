@@ -1,33 +1,101 @@
 <!DOCTYPE html>
-<html lang="en" xml:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xml:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{base}">
 <head>
-    <meta charset="UTF-8">
-    <title>Users</title>
+
+    <!--    <title>Users</title>-->
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Users</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h1>Users</h1>
-<a th:href="@{/admin/user-create}" class="btn btn-primary btn-sm mb-3"> Add User </a>
+<nav th:fragment="navigation" class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
 
-<table border="1">
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
+        <div sec:authorize="isAuthenticated()" class="text-white">
+            <span th:text="${userAuth.email}"></span> with roles
+            <tr th:each="role : ${userAuth.roles}">
+                <td th:utext="${role.name}">name</td>
+            </tr>
+        </div>
 
-    <tr th:each="user : ${users}">
-        <td th:utext="${user.firstname}">Firstname</td>
-        <td th:utext="${user.lastname}">Lastname</td>
-        <td th:utext="${user.email}">Email</td>
-        <td><a th:href="@{/admin/user-update/{id}(id=${user.id})}" class="btn btn-primary">Update</a></td>
-        <td><a th:href="@{/admin/user-delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a></td>
-    </tr>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Logout"/>
+                </form>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <nav th:fragment="navigation2" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse text-left">
+            <div class="container">
 
-</table>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse d-flex flex-column flex-shrink-0 p-3" id="navbarResponsive2">
+                    <ul class="navbar-nav nav-pills flex-column mb-auto">
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link"
+                                                                                 th:href="@{/admin/users}">Admin
+                        </a></li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
+                                                                                  th:href="@{/user-info}">User</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div>
+            <h1>Admin panel</h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Users table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/user-create}">New user</a>
+                </li>
+
+            </ul>
+            <!--            <a th:href="@{/admin/user-create}" class="btn btn-primary btn-sm mb-3"> Add User </a>-->
+            <div class="table-responsive">
+            <table class="table table-striped w-auto fit">
+                <thead>
+                <tr>
+                    <th class="w-auto fit">Firstname</th>
+                    <th class="w-auto fit">Lastname</th>
+                    <th class="w-auto fit">Email</th>
+                    <th class="w-auto fit">Edit</th>
+                    <th class="w-auto fit">Delete</th>
+                </tr>
+                </thead>
+                <tr th:each="user : ${users}">
+                    <td th:utext="${user.firstname}">Firstname</td>
+                    <td th:utext="${user.lastname}">Lastname</td>
+                    <td th:utext="${user.email}">Email</td>
+                    <td><a th:href="@{/admin/user-update/{id}(id=${user.id})}" class="btn btn-info">Update</a></td>
+                    <td><a th:href="@{/admin/user-delete/{id}(id=${user.id})}" class="btn btn-danger">Delete</a></td>
+                </tr>
+
+            </table>
+            </div>
+            <div th:insert="~{fragments/footer :: copy}"></div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

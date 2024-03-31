@@ -1,36 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xml:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{base}">
 <head>
-    <meta charset="UTF-8">
-    <title>Users info</title>
+
+    <!--    <title>Users</title>-->
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Users</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-    <hr>
-    <form action="#" th:action="@{/user-info}" th:object="${user}" method="POST">
-        <h1>Hello! </h1>
-        <input type="text" th:field="*{username}"
-               placeholder="User Name" class="form-control mb-4 col-4">
+<nav th:fragment="navigation" class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
 
-        <input type="text" th:field="*{firstname}"
-               placeholder="User Name" class="form-control mb-4 col-4">
+        <div sec:authorize="isAuthenticated()" class="text-white">
+            <span th:text="${user.email}"></span> with roles
+            <tr th:each="role : ${user.roles}">
+                <td th:utext="${role.name}">name</td>
+            </tr>
+        </div>
 
-        <input type="text" th:field="*{lastname}"
-               placeholder="Last Name" class="form-control mb-4 col-4">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Logout"/>
+                </form>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <nav th:fragment="navigation2" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse text-left">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <input type="text" th:field="*{email}"
-               placeholder="Course Email" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{username}"
-               placeholder="username" class="form-control mb-4 col-4">
+                <div class="collapse navbar-collapse d-flex flex-column flex-shrink-0 p-3" id="navbarResponsive2">
+                    <ul class="navbar-nav nav-pills flex-column mb-auto">
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link"
+                                                                                 th:href="@{/admin/users}">Admin
+                        </a></li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
+                                                                                  th:href="@{/user-info}">User</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="col-8">
+            <div class="flex-grow-1 bg-light p-3">
+                <h1>User information-page</h1>
+                <div class="container-fluid">
+                    <div class="row border">
+                        <h5 class="m-2">About user</h5>
+                    </div>
+                    <div class="row border bg-white pb-2">
+                        <table class="table table-borderless m-3">
+                            <thead>
+                            <tr class="border-top">
+                                <th scope="col">ID</th>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">E-mail</th>
+                                <th scope="col">Roles</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="border-top bg-light" th:object="${user}">
+                                <td th:text="*{id}"/>
+                                <td th:text="*{firstname}"/>
+                                <td th:text="*{lastname}"/>
+                                <td th:text="*{email}"/>
+                                <td><th:block th:each="role : *{getRoles()}">
+                                    &nbsp;<span th:text="${role.name}"/>
+                                </th:block></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-<!--        <button type="submit" class="btn btn-info col-2"> Save User</button>-->
-    </form>
-
-    <hr>
-
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
+            <a th:href="@{/admin/users}"> Back to User List</a>
+        </div>
+        <div th:insert="~{fragments/footer :: copy}"></div>
+    </div>
 </div>
 </body>
 </html>

@@ -1,35 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xml:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{base}">
 <head>
-    <meta charset="UTF-8">
-    <title>Users update</title>
+
+    <!--    <title>Users</title>-->
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Users</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-    <hr>
-    <h2>Save</h2>
+<nav th:fragment="navigation" class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
 
-    <form action="#" th:action="@{/admin/user-update}" th:object="${user}"
-          method="POST">
-        <input type="text" th:field="*{firstname}"
-               placeholder="User Name" class="form-control mb-4 col-4">
+        <div sec:authorize="isAuthenticated()" class="text-white">
+            <span th:text="${userAuth.email}"></span> with roles
+            <tr th:each="role : ${userAuth.roles}">
+                <td th:utext="${role.name}">name</td>
+            </tr>
+        </div>
 
-        <input type="text" th:field="*{lastname}"
-               placeholder="Last Name" class="form-control mb-4 col-4">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Logout"/>
+                </form>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <nav th:fragment="navigation2" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse text-left">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <input type="text" th:field="*{email}"
-               placeholder="Course Email" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{username}"
-               placeholder="username" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{password}"
-               placeholder="password" class="form-control mb-4 col-4">
+                <div class="collapse navbar-collapse d-flex flex-column flex-shrink-0 p-3" id="navbarResponsive2">
+                    <ul class="navbar-nav nav-pills flex-column mb-auto">
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link"
+                                                                                 th:href="@{/admin/users}">Admin
+                        </a></li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
+                                                                                  th:href="@{/user-info}">User</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="col-8">
+            <h2>Update user</h2>
 
-        <button type="submit" class="btn btn-info col-2"> Save User</button>
-    </form>
+            <form action="#" th:action="@{/admin/user-update}" th:object="${user}"
+                  method="POST">
+                <input type="text" th:field="*{firstname}"
+                       placeholder="User Name" class="form-control mb-4 col-4">
 
-    <hr>
+                <input type="text" th:field="*{lastname}"
+                       placeholder="Last Name" class="form-control mb-4 col-4">
 
-    <a th:href="@{/admin/users}"> Back to User List</a>
+                <input type="text" th:field="*{email}"
+                       placeholder="Course Email" class="form-control mb-4 col-4">
+                <input type="text" th:field="*{username}"
+                       placeholder="username" class="form-control mb-4 col-4">
+                <input type="text" th:field="*{password}"
+                       placeholder="password" class="form-control mb-4 col-4">
+
+                <button type="submit" class="btn btn-info col-2"> Save User</button>
+            </form>
+
+            <hr>
+
+            <a th:href="@{/admin/users}"> Back to User List</a>
+        </div>
+        <div th:insert="~{fragments/footer :: copy}"></div>
+    </div>
 </div>
 </body>
 </html>

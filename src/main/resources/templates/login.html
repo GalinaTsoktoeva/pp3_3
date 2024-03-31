@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Spring Security Example </title>
+
+    <link href="static/css/sign-in.css" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex align-items-center  bg-light py-4 bg-body-tertiary">
+
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+<main class="form-signin w-50 m-auto">
+
+    <form th:action="@{/login}" method="post">
+        <div class="mt-5 mb-5 offset-md-2">
+            <h4>Please sign in</h4>
+            <div class="form-floating"><label for="floatingInput"> User Name <input type="text" name="username"
+                                                                                    class="form-control"
+                                                                                    id="floatingInput"/> </label></div>
+            <div class="form-floating"><label for="floatingPassword"> Password <input type="password" name="password"
+                                                                                      class="form-control"
+                                                                                      id="floatingPassword"/> </label>
+            </div>
+            <div><input type="submit" class="btn btn-primary" value="Sign In"/></div>
+        </div>
+    </form>
+    <div class="col-md-8 offset-md-2">
+        <div th:insert="~{fragments/footer :: copy}"></div>
+    </div>
+</main>
 </body>
 </html>
